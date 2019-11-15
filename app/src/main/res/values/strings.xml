@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">Ven-U</string>
-    <string name="title_map">Map</string>
-    <string name="title_profile">Profile</string>
-    <string name="title_timeline">Timeline</string>
-    <string name="edit">edit</string>
 </resources>
