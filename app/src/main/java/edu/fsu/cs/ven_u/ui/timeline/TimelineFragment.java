@@ -2,6 +2,8 @@ package edu.fsu.cs.ven_u.ui.timeline;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,6 +31,11 @@ public class TimelineFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private TimelineViewModel timelineViewModel;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         timelineViewModel = ViewModelProviders.of(this).get(TimelineViewModel.class);
