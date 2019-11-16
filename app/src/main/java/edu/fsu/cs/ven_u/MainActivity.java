@@ -2,6 +2,7 @@ package edu.fsu.cs.ven_u;
 
 import android.net.Uri;
 import android.os.Bundle;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -14,8 +15,10 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class MainActivity extends AppCompatActivity implements
         LoginFragment.OnLoginFragmentInteractionListener,
