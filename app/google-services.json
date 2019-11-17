@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "802504180258",
+    "firebase_url": "https://ven-u-79b73.firebaseio.com",
+    "project_id": "ven-u-79b73",
+    "storage_bucket": "ven-u-79b73.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802504180258:android:d0b8cec124421ca81dc07b",
+        "android_client_info": {
+          "package_name": "edu.fsu.cs.ven_u"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802504180258-4n2io0m6glcht8fqsd0j3gu45f7nos7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMi0LqPujabCiY57hIeA_IW0IvxawJoic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802504180258-4n2io0m6glcht8fqsd0j3gu45f7nos7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
