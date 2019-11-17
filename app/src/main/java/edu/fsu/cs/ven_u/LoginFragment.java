@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +20,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 
 /**
@@ -123,20 +128,32 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        /*  if (database does not contain username) {
-                Toast.makeText(getActivity(),"Username does not exist.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (username does not match password in database) {
-                Toast.makeText(getActivity(),"Username and password do not match.",
-                    Toast.LENGTH_SHORT).show();
-                return;
-            }
-         */
 
-        Intent intent = new Intent(getActivity(), NavigationActivity.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
+        final Database db = new Database();
+        db.userDb.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //No matching username
+                        if (dataSnapshot.getChildrenCount() == 0) {
+                            Toast.makeText(getActivity(), "Username does not exist.", Toast.LENGTH_SHORT).show();
+                        }
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            Database.User user = child.getValue(Database.User.class);
+                            //Password doesn't match
+                            if(!user.getPassword().equals(password)){
+                                Toast.makeText(getActivity(),"Username and password do not match.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            //Success
+                            else{
+                                Intent intent = new Intent(getActivity(), NavigationActivity.class);
+                                intent.putExtra("username", username);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                });
     }
 
     public boolean formIsFilled() {
