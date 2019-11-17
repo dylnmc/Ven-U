@@ -1,13 +1,17 @@
 package edu.fsu.cs.ven_u.ui.profile;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +31,10 @@ public class ProfileFragment extends Fragment {
     public Button viewEventsButton;
     public Button changePasswordButton;
     public TextView textName;
+    public TextView textNameEdit;
     public TextView textUsername;
     public TextView textBiography;
+    public TextView textBiographyEdit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,17 +49,114 @@ public class ProfileFragment extends Fragment {
         changePasswordButton = root.findViewById(R.id.button_change_password);
         viewEventsButton = root.findViewById(R.id.button_view_events);
         textName = root.findViewById(R.id.text_name);
+        textNameEdit = root.findViewById(R.id.text_name_edit);
         textUsername = root.findViewById(R.id.text_username);
         textBiography = root.findViewById(R.id.text_biography);
+        textBiographyEdit = root.findViewById(R.id.text_biography_edit);
 
         // textName.setText(get name from database);
         textUsername.setText( '@' + ((NavigationActivity)getActivity()).getCurrentUsername());
         // textBiography.setText(get biography from database);
 
+        // Name change button and dialog popup
+        textNameEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog buildEvent = new Dialog(getContext());
+                buildEvent.setContentView(R.layout.change_name);
+                buildEvent.setTitle("Change Name");
+
+                final EditText changename = buildEvent.findViewById(R.id.edit_change_name);
+
+                Button nameChange = buildEvent.findViewById(R.id.button_confirm_namechange);
+                Button nameCancel = buildEvent.findViewById(R.id.button_cancel_namechange);
+
+                nameChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String name = changename.getText().toString();
+                        Log.i("PROFILE", "changing name to: " + name);
+                        buildEvent.dismiss();
+                    }
+                });
+
+                nameCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buildEvent.dismiss();
+                    }
+                });
+
+                buildEvent.setCancelable(false);
+                buildEvent.show();
+            }
+        });
+
+        // Biography change text listener and dialog popup
+        textBiographyEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog buildEvent = new Dialog(getContext());
+                buildEvent.setContentView(R.layout.change_biography);
+                buildEvent.setTitle("Change Biography");
+
+                final EditText changebio = buildEvent.findViewById(R.id.edit_change_bio);
+
+                Button bioChange = buildEvent.findViewById(R.id.button_confirm_biochange);
+                Button bioCancel = buildEvent.findViewById(R.id.button_cancel_biochange);
+
+                bioChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String bio = changebio.getText().toString();
+                        Log.i("PROFILE", "changing bio to: " + bio);
+                        buildEvent.dismiss();
+                    }
+                });
+
+                bioCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buildEvent.dismiss();
+                    }
+                });
+
+                buildEvent.setCancelable(false);
+                buildEvent.show();
+            }
+        });
+
+        // password change button listener and dialog popup
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                final Dialog buildEvent = new Dialog(getContext());
+                buildEvent.setContentView(R.layout.change_password);
+                buildEvent.setTitle("Change Password");
+
+                final EditText changepwd = buildEvent.findViewById(R.id.edit_change_password);
+
+                Button pwdChange = buildEvent.findViewById(R.id.button_confirm_pwdchange);
+                Button pwdCancel = buildEvent.findViewById(R.id.button_cancel_pwdchange);
+
+                pwdChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String password = changepwd.getText().toString();
+                        Log.i("PROFILE", "changing password to: " + password);
+                        buildEvent.dismiss();
+                    }
+                });
+
+                pwdCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buildEvent.dismiss();
+                    }
+                });
+
+                buildEvent.setCancelable(false);
+                buildEvent.show();
             }
         });
 
