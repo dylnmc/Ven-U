@@ -14,8 +14,8 @@ public class Database {
     private final String EVENT_DB = "events";
     private final String USER_DB = "users";
     private final String TAG = "Database.java";
-    private DatabaseReference eventDb;
-    private DatabaseReference userDb;
+    public DatabaseReference eventDb;
+    public DatabaseReference userDb;
 
     public Database(){
         //References for events and users database

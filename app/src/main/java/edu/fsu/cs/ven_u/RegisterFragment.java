@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,6 +23,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -129,35 +134,38 @@ public class RegisterFragment extends Fragment {
 
         // xml file already restricts username unwanted characters
 
-        // query database for username
-        /* if (database already contains username) {
-            Toast.makeText(getActivity(),"Username taken. Try again.",
-                    Toast.LENGTH_SHORT).show();
-            return;
-            }
-         */
+        final Database db = new Database();
+        db.userDb.orderByChild("username").equalTo(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        //For all entries with given title
+                        if(dataSnapshot.getChildrenCount() != 0) {
+                            Toast.makeText(getActivity(), "Username taken. Try again.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            if (password.length() < 6) {
+                                Toast.makeText(getActivity(),
+                                        "Password must be at least 6 characters. Try again.",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
-        if (password.length() < 6) {
-            Toast.makeText(getActivity(),
-                    "Password must be at least 6 characters. Try again.",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
+                            if (!password.equals(confirmPassword)) {
+                                Toast.makeText(getActivity(),"Passwords do not match. Try again.",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(getActivity(),"Passwords do not match. Try again.",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        /*
-        add name to database
-        add username to db
-        add password to db
-        add biography to db
-         */
-        Intent intent = new Intent(getActivity(), NavigationActivity.class);
-        intent.putExtra("username", username);
-        startActivity(intent);
+                            Database.User user = new Database.User(name, username, biography, password);
+                            db.addUser(user);
+                            Intent intent = new Intent(getActivity(), NavigationActivity.class);
+                            intent.putExtra("username", username);
+                            startActivity(intent);
+                        }
+                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                });
     }
 
     public boolean formIsFilled() {
