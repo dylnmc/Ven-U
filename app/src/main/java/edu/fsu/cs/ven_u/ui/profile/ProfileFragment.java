@@ -58,12 +58,13 @@ public class ProfileFragment extends Fragment {
         textUsername.setText( '@' + ((NavigationActivity)getActivity()).getCurrentUsername());
         // textBiography.setText(get biography from database);
 
+        // Name change button and dialog popup
         textNameEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Dialog buildEvent = new Dialog(getContext());
                 buildEvent.setContentView(R.layout.change_name);
-                buildEvent.setTitle("Change Password");
+                buildEvent.setTitle("Change Name");
 
                 final EditText changename = buildEvent.findViewById(R.id.edit_change_name);
 
@@ -91,6 +92,41 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        // Biography change text listener and dialog popup
+        textBiographyEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog buildEvent = new Dialog(getContext());
+                buildEvent.setContentView(R.layout.change_biography);
+                buildEvent.setTitle("Change Biography");
+
+                final EditText changebio = buildEvent.findViewById(R.id.edit_change_bio);
+
+                Button bioChange = buildEvent.findViewById(R.id.button_confirm_biochange);
+                Button bioCancel = buildEvent.findViewById(R.id.button_cancel_biochange);
+
+                bioChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String bio = changebio.getText().toString();
+                        Log.i("PROFILE", "changing bio to: " + bio);
+                        buildEvent.dismiss();
+                    }
+                });
+
+                bioCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buildEvent.dismiss();
+                    }
+                });
+
+                buildEvent.setCancelable(false);
+                buildEvent.show();
+            }
+        });
+
+        // password change button listener and dialog popup
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
