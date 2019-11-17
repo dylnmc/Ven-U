@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -21,7 +22,12 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
+import edu.fsu.cs.ven_u.Database;
+import edu.fsu.cs.ven_u.NavigationActivity;
 import edu.fsu.cs.ven_u.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -87,6 +93,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             mapAPI.moveCamera(CameraUpdateFactory.newLatLng(eventPosition));
                             mapAPI.animateCamera(CameraUpdateFactory.zoomTo(19));
 
+                            final Database db = new Database();
+                            Database.Event event = new Database.Event(eventName,eventDesc,
+                                    ((NavigationActivity)getActivity()).getCurrentUsername(),
+                                    eventPosition.latitude, eventPosition.longitude, eventType);
+                            db.addEvent(event);
                             buildEvent.dismiss();
                         }
                     }
