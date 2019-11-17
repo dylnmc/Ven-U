@@ -122,11 +122,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        // setup google map autocomplete seach
+        // setup google map autocomplete search
         // https://developers.google.com/places/android-sdk/autocomplete#add_a_placeselectionlistener_to_an_activity
+        // https://stackoverflow.com/questions/54774648/im-using-the-new-places-sdk-in-android-the-autocompletesupportfragment-and-it
+        // https://stackoverflow.com/questions/14654758/google-places-api-request-denied-for-android-autocomplete-even-with-the-right-a
+        // https://developers.google.com/places/android-sdk/autocomplete#constrain_autocomplete_results
+        // https://developers.google.com/places/android-sdk/reference/com/google/android/libraries/places/widget/AutocompleteSupportFragment
+        // https://iteritory.com/android-google-places-autocomplete-feature-using-new-places-sdk/?fbclid=IwAR3-nV3ELTilG_W79xmC-UhI9Gkag58Odykg0fW8THisBH7aNb46PCmAnz4
+
 
         Resources res = getResources();
-
 
         // Initialize the AutocompleteSupportFragment.
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.mapAutocomplete);
