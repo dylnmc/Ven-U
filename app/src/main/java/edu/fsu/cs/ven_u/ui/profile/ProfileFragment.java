@@ -31,8 +31,10 @@ public class ProfileFragment extends Fragment {
     public Button viewEventsButton;
     public Button changePasswordButton;
     public TextView textName;
+    public TextView textNameEdit;
     public TextView textUsername;
     public TextView textBiography;
+    public TextView textBiographyEdit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,12 +49,47 @@ public class ProfileFragment extends Fragment {
         changePasswordButton = root.findViewById(R.id.button_change_password);
         viewEventsButton = root.findViewById(R.id.button_view_events);
         textName = root.findViewById(R.id.text_name);
+        textNameEdit = root.findViewById(R.id.text_name_edit);
         textUsername = root.findViewById(R.id.text_username);
         textBiography = root.findViewById(R.id.text_biography);
+        textBiographyEdit = root.findViewById(R.id.text_biography_edit);
 
         // textName.setText(get name from database);
         textUsername.setText( '@' + ((NavigationActivity)getActivity()).getCurrentUsername());
         // textBiography.setText(get biography from database);
+
+        textNameEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog buildEvent = new Dialog(getContext());
+                buildEvent.setContentView(R.layout.change_name);
+                buildEvent.setTitle("Change Password");
+
+                final EditText changename = buildEvent.findViewById(R.id.edit_change_name);
+
+                Button nameChange = buildEvent.findViewById(R.id.button_confirm_namechange);
+                Button nameCancel = buildEvent.findViewById(R.id.button_cancel_namechange);
+
+                nameChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String name = changename.getText().toString();
+                        Log.i("PROFILE", "changing name to: " + name);
+                        buildEvent.dismiss();
+                    }
+                });
+
+                nameCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buildEvent.dismiss();
+                    }
+                });
+
+                buildEvent.setCancelable(false);
+                buildEvent.show();
+            }
+        });
 
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
