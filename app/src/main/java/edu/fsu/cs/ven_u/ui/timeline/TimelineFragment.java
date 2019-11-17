@@ -42,14 +42,14 @@ public class TimelineFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_timeline, container, false);
 
         // final TextView textView = root.findViewById(R.id.text_timeline);
-        timelineViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                // textView.setText(s);
-            }
-        });
+        // timelineViewModel.getText().observe(this, new Observer<String>() {
+        //     @Override
+        //     public void onChanged(@Nullable String s) {
+        //         // textView.setText(s);
+        //     }
+        // });
 
-        ArrayList<TimelineItem> timelineList = new ArrayList<>();
+        final ArrayList<TimelineItem> timelineList = new ArrayList<>();
         timelineList.add(new TimelineItem("Gina's Party", "public"));
         timelineList.add(new TimelineItem("RubiCorp Symposium", "public"));
         timelineList.add(new TimelineItem("Bob's Party", "public"));

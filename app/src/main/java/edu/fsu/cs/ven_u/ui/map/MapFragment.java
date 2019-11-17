@@ -1,7 +1,9 @@
 package edu.fsu.cs.ven_u.ui.map;
 
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +17,26 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+
+import java.util.Arrays;
 
 import edu.fsu.cs.ven_u.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    private final static String TAG = "MAP_FRAGMENT";
 
     MapViewModel mapViewModel;
     GoogleMap mapAPI;
@@ -41,14 +53,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        mapViewModel =
-                ViewModelProviders.of(this).get(MapViewModel.class);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
         View root = inflater.inflate(R.layout.fragment_map, container, false);
 
-        mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.mapAPI);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapAPI);
         mapFragment.getMapAsync(this);
 
         createEvent = root.findViewById(R.id.addEvent);
@@ -110,6 +119,39 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Set Up find Event",
                         Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // setup google map autocomplete seach
+        // https://developers.google.com/places/android-sdk/autocomplete#add_a_placeselectionlistener_to_an_activity
+
+        Resources res = getResources();
+
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.mapAutocomplete);
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), res.getString(R.string.map_key));
+        }
+        PlacesClient placesClient = Places.createClient(getActivity());
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlon = place.getLatLng();
+                Log.i(TAG, "Place: " + place.getName() + " @ " + latlon.toString());
+                mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon, 14));
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Log.e(TAG, "An error occurred: " + status);
             }
         });
 
