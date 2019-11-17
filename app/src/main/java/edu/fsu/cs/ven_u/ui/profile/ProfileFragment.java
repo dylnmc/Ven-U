@@ -1,13 +1,17 @@
 package edu.fsu.cs.ven_u.ui.profile;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +57,33 @@ public class ProfileFragment extends Fragment {
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                final Dialog buildEvent = new Dialog(getContext());
+                buildEvent.setContentView(R.layout.change_password);
+                buildEvent.setTitle("Change Password");
+
+                final EditText changepwd = buildEvent.findViewById(R.id.edit_change_password);
+
+                Button pwdChange = buildEvent.findViewById(R.id.button_confirm_pwdchange);
+                Button pwdCancel = buildEvent.findViewById(R.id.button_cancel_pwdchange);
+
+                pwdChange.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String password = changepwd.getText().toString();
+                        Log.i("PROFILE", "changing password to: " + password);
+                        buildEvent.dismiss();
+                    }
+                });
+
+                pwdCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        buildEvent.dismiss();
+                    }
+                });
+
+                buildEvent.setCancelable(false);
+                buildEvent.show();
             }
         });
 
