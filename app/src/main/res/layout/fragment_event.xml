@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EventFragment">
+    tools:context=".EventFragment"
+    android:background="@color/cardview_light_background"
+    android:layout_centerHorizontal="true"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -117,5 +120,17 @@
         android:layout_alignBaseline="@id/visibility_text"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"/>
+
+    <Button
+        android:id="@+id/button_close_viewevent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/close"
+        android:layout_below="@id/visibility_text"
+        android:layout_centerHorizontal="true"
+        />
 
 </RelativeLayout>

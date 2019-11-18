@@ -1,17 +1,22 @@
 package edu.fsu.cs.ven_u.ui.timeline;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,11 +33,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import edu.fsu.cs.ven_u.Database;
+import edu.fsu.cs.ven_u.EventFragment;
 import edu.fsu.cs.ven_u.R;
-import edu.fsu.cs.ven_u.TimelineAdapter;
+import edu.fsu.cs.ven_u.TimelineRecyclerAdapter;
 import edu.fsu.cs.ven_u.TimelineItem;
 
-public class TimelineFragment extends Fragment{
+public class TimelineFragment extends Fragment implements TimelineRecyclerAdapter.OnTimelineItemListener {
+    private String TAG = "TIMELINE_FRAGMENT";
+
+    private ArrayList<TimelineItem> timelineItems = new ArrayList<>();
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -70,7 +79,6 @@ public class TimelineFragment extends Fragment{
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         //For each child
-                        ArrayList<TimelineItem> timelineList = new ArrayList<>();
                         for(DataSnapshot child : dataSnapshot.getChildren()) {
                             Database.Event event = child.getValue(Database.Event.class);
                             //Create location object
@@ -80,20 +88,20 @@ public class TimelineFragment extends Fragment{
 
                             //Check if within radius(currently 5 miles)
                             if(current_location.distanceTo(location) <= RADIUS){
-                                timelineList.add(new TimelineItem(event.getTitle(),
-                                        event.getVisibility()));
+                                timelineItems.add(new TimelineItem(event.getTitle(),
+                                        event.getVisibility(), event.getCreator(), event.getDescription()));
                             }
                         }
                         mRecyclerView = root.findViewById(R.id.recyclerView);
                         mRecyclerView.setHasFixedSize(true);
-                        mLayoutManager = new LinearLayoutManager(getContext());
+                        mLayoutManager = new LinearLayoutManager(getActivity());
 
                         //If no events found, insert message
-                        if(timelineList.size() == 0) {
-                            timelineList.add(new TimelineItem(
-                                    "No events found", ""));
+                        if(timelineItems.size() == 0) {
+                            timelineItems.add(new TimelineItem(
+                                    "No events found", "", "", ""));
                         }
-                        mAdapter = new TimelineAdapter(timelineList);
+                        mAdapter = new TimelineRecyclerAdapter(timelineItems, TimelineFragment.this);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mAdapter);
 
@@ -103,4 +111,81 @@ public class TimelineFragment extends Fragment{
         return root;
     }
 
+    // https://www.youtube.com/watch?v=69C1ljfDvl0
+
+    @Override
+    public void onItemClick(int position) {
+        // https://stackoverflow.com/questions/18461990/pop-up-window-to-display-some-stuff-in-a-fragment
+        View popupView = getLayoutInflater().inflate(R.layout.fragment_event, null);
+        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        EventFragment eventFragment = new EventFragment();
+        TimelineItem item = timelineItems.get(position);
+
+        TextView title_view = popupView.findViewById(R.id.event_title);
+        TextView desc_view = popupView.findViewById(R.id.event_desc);
+        TextView creator_view = popupView.findViewById(R.id.event_creator);
+        TextView visibility_view = popupView.findViewById(R.id.event_visibility);
+        TextView start_view = popupView.findViewById(R.id.event_start);
+        TextView end_view = popupView.findViewById(R.id.event_end);
+        Button close_btn = popupView.findViewById(R.id.button_close_viewevent);
+
+        title_view.setText(item.getTitle());
+        desc_view.setText(item.getDescription());
+        creator_view.setText(item.getCreator());
+        visibility_view.setText(item.getVisibility());
+
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable());
+
+        int location[] = new int[2];
+        View anchorView = getView();
+        anchorView.getLocationOnScreen(location);
+        popupWindow.showAtLocation(anchorView, Gravity.CENTER_HORIZONTAL, location[0], 0 /* location[1] + anchorView.getHeight() */);
+
+        close_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                }
+            }
+        });
+
+        /*
+        // fragmentTransaction.replace(R.id.recyclerView, fragment);
+        // fragmentTransaction.commit(); // save the changes
+
+        final Dialog buildEvent = new Dialog(getContext());
+        buildEvent.setContentView(R.layout.view_event);
+
+        // create EventFragment
+        EventFragment eventFragment = new EventFragment();
+        TimelineItem item = timelineItems.get(position);
+        Bundle extras = new Bundle();
+        extras.putString("title", item.getTitle());
+        extras.putString("visibility", item.getVisibility());
+        extras.putString("creator", item.getCreator());
+        extras.putString("description", item.getDescription());
+
+        // add fragment_event to view_event layout's @id/event_container
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction();
+        trans.add(R.id.event_container, eventFragment, "event_fragment");
+
+        buildEvent.setTitle("Event");
+
+        Button viewClose = buildEvent.findViewById(R.id.button_close_viewevent);
+
+        viewClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buildEvent.dismiss();
+            }
+        });
+
+        buildEvent.setCancelable(false);
+        buildEvent.show();
+         */
+    }
 }
