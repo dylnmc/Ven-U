@@ -92,8 +92,14 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         String name = changename.getText().toString();
-                        Log.i("PROFILE", "changing name to: " + name);
-                        buildEvent.dismiss();
+                        if (name.isEmpty()) {
+                            Toast.makeText(getActivity(),"Name cannot be blank.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Log.i("PROFILE", "changing name to: " + name);
+                            buildEvent.dismiss();
+                        }
                     }
                 });
 
@@ -160,8 +166,17 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         String password = changepwd.getText().toString();
-                        Log.i("PROFILE", "changing password to: " + password);
-                        buildEvent.dismiss();
+                        if (password.length() < 6) {
+                            Toast.makeText(getActivity(),
+                                    "Password must be at least 6 characters. Try again.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Log.i("PROFILE", "changing password to: " + password);
+                            Toast.makeText(getActivity(), "Password changed successfully.",
+                                    Toast.LENGTH_SHORT).show();
+                            buildEvent.dismiss();
+                        }
                     }
                 });
 
