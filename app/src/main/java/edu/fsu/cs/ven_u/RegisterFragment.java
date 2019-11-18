@@ -220,4 +220,5 @@ public class RegisterFragment extends Fragment {
         // TODO: Update argument type and name
         void OnRegisterFragmentInteraction(Uri uri);
     }
+
 }

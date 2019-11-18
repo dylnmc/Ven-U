@@ -63,18 +63,7 @@ public class TimelineRecyclerAdapter extends RecyclerView.Adapter<TimelineRecycl
         return mTimelineItems.size();
     }
 
-
-    /*
-    public void loadFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_frame, fragment);
-        fragmentTransaction.commit(); // save the changes
-    }
-    */
-
     // https://www.youtube.com/watch?v=69C1ljfDvl0
-
     public interface OnTimelineItemListener {
         void onItemClick(int position);
     }

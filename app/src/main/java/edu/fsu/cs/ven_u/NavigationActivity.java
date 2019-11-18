@@ -6,13 +6,17 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import edu.fsu.cs.ven_u.ui.map.MapFragment;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -59,4 +63,19 @@ public class NavigationActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.options_menu, menu);
         return true;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MapFragment.MY_PERMISSIONS_REQUEST_COARSE_LOCATION
+                || requestCode == MapFragment.MY_PERMISSIONS_REQUEST_COARSE_LOCATION
+                || requestCode == MapFragment.MY_PERMISSIONS_REQUEST_INTERNET) {
+            MapFragment fragment = (MapFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_frame);
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && fragment != null && fragment.mapAPI != null) {
+                // well, I tried ...
+                fragment.onMapReady(fragment.mapAPI);
+            }
+        }
+    }
+
 }

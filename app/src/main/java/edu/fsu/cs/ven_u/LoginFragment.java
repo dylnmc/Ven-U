@@ -210,4 +210,5 @@ public class LoginFragment extends Fragment {
         // TODO: Update argument type and name
         void OnLoginFragmentInteraction(Uri uri);
     }
+
 }
