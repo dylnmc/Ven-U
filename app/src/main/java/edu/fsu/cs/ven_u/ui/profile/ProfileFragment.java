@@ -91,7 +91,21 @@ public class ProfileFragment extends Fragment {
                 nameChange.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String name = changename.getText().toString();
+                        final String name = changename.getText().toString();
+                        db.userDb.orderByChild("username").equalTo(username)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren()){
+                                            Database.User user = child.getValue(Database.User.class);
+
+                                            user.setName(name);
+                                            String key = child.getKey();
+                                            db.userDb.child(key).setValue(user);
+                                            textName.setText(name);
+                                        }
+                                    }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
                         Log.i("PROFILE", "changing name to: " + name);
                         buildEvent.dismiss();
                     }
@@ -125,7 +139,21 @@ public class ProfileFragment extends Fragment {
                 bioChange.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String bio = changebio.getText().toString();
+                        final String bio = changebio.getText().toString();
+                        db.userDb.orderByChild("username").equalTo(username)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren()){
+                                            Database.User user = child.getValue(Database.User.class);
+
+                                            user.setBio(bio);
+                                            String key = child.getKey();
+                                            db.userDb.child(key).setValue(user);
+                                            textBiography.setText(bio);
+                                        }
+                                    }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
                         Log.i("PROFILE", "changing bio to: " + bio);
                         buildEvent.dismiss();
                     }
@@ -159,7 +187,20 @@ public class ProfileFragment extends Fragment {
                 pwdChange.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String password = changepwd.getText().toString();
+                        final String password = changepwd.getText().toString();
+                        db.userDb.orderByChild("username").equalTo(username)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren()){
+                                            Database.User user = child.getValue(Database.User.class);
+
+                                            user.setPassword(password);
+                                            String key = child.getKey();
+                                            db.userDb.child(key).setValue(user);
+                                        }
+                                    }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
                         Log.i("PROFILE", "changing password to: " + password);
                         buildEvent.dismiss();
                     }
