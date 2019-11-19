@@ -1,9 +1,11 @@
 package edu.fsu.cs.ven_u.ui.timeline;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,7 +17,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +35,7 @@ import edu.fsu.cs.ven_u.Database;
 import edu.fsu.cs.ven_u.R;
 import edu.fsu.cs.ven_u.TimelineItem;
 import edu.fsu.cs.ven_u.TimelineRecyclerAdapter;
+import edu.fsu.cs.ven_u.ui.map.MapFragment;
 
 public class TimelineFragment extends Fragment implements TimelineRecyclerAdapter.OnTimelineItemListener {
     private String TAG = "TIMELINE_FRAGMENT";
@@ -124,14 +129,17 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
 
         TimelineItem item = timelineItems.get(position);
 
-        TextView title_view = popupView.findViewById(R.id.event_title);
-        TextView desc_view = popupView.findViewById(R.id.event_desc);
-        TextView creator_view = popupView.findViewById(R.id.event_creator);
-        TextView visibility_view = popupView.findViewById(R.id.event_visibility);
-        TextView start_view = popupView.findViewById(R.id.event_start);
-        TextView end_view = popupView.findViewById(R.id.event_end);
-        TextView location_view = popupView.findViewById(R.id.event_location);
-        Button close_btn = popupView.findViewById(R.id.button_close_viewevent);
+        final TextView title_view = popupView.findViewById(R.id.event_title);
+        final TextView desc_view = popupView.findViewById(R.id.event_desc);
+        final TextView creator_view = popupView.findViewById(R.id.event_creator);
+        final TextView visibility_view = popupView.findViewById(R.id.event_visibility);
+        final TextView start_view = popupView.findViewById(R.id.event_start);
+        final TextView end_view = popupView.findViewById(R.id.event_end);
+        final TextView location_view = popupView.findViewById(R.id.event_location);
+
+        final Button close_btn = popupView.findViewById(R.id.button_close_viewevent);
+        final Button directions_btn = popupView.findViewById(R.id.button_directions);
+        final Button show_btn = popupView.findViewById(R.id.button_show);
 
         title_view.setText(item.getTitle());
         desc_view.setText(item.getDescription());
@@ -140,8 +148,8 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         start_view.setText(item.getStart());
         end_view.setText(item.getEnd());
         Geocoder geo = new Geocoder(getContext());
-        double lat = item.getLatitude();
-        double lon = item.getLongitude();
+        final double lat = item.getLatitude();
+        final double lon = item.getLongitude();
         List<Address> addresses = null;
         try {
             addresses = geo.getFromLocation(lat, lon, 1);
@@ -169,6 +177,38 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                 if (popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
+            }
+        });
+
+        directions_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // start maps intent passing location as query
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("geo:0,0?q=" + lat + "," + lon + " (" + title_view.getText().toString() + ")"));
+                startActivity(intent);
+            }
+        });
+
+        show_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                }
+                Bundle directions = new Bundle();
+                directions.putDouble("lat", lat);
+                directions.putDouble("long", lon);
+                directions.putString("directions", "directions");
+                FragmentTransaction fragTrans = getActivity().getSupportFragmentManager()
+                        .beginTransaction();
+                MapFragment mpFrag = new MapFragment();
+                mpFrag.setArguments(directions);
+                fragTrans.replace(R.id.nav_host_fragment, mpFrag);
+                fragTrans.setPrimaryNavigationFragment(mpFrag);
+                fragTrans.setReorderingAllowed(true);
+                fragTrans.commitNowAllowingStateLoss();
+                // fragTrans.commit();
             }
         });
 

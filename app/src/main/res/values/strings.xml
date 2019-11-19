@@ -30,7 +30,11 @@
     <string name="close">Close</string>
     <string name="change">Change</string>
     <string name="change_password">Change Password</string>
+    <string name="change_biography">Change Biography</string>
+    <string name="change_name">Change Name</string>
     <string name="view_events">View Events</string>
+    <string name="directions">Directions</string>
+    <string name="show">Show</string>
 
     <string-array name="eventType">
         <item>private</item>

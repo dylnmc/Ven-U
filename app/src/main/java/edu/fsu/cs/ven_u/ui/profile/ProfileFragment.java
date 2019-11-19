@@ -92,15 +92,23 @@ public class ProfileFragment extends Fragment {
                 nameChange.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String name = changename.getText().toString();
-                        if (name.isEmpty()) {
-                            Toast.makeText(getActivity(),"Name cannot be blank.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Log.i("PROFILE", "changing name to: " + name);
-                            buildEvent.dismiss();
-                        }
+                        final String name = changename.getText().toString();
+                        db.userDb.orderByChild("username").equalTo(username)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren()){
+                                            Database.User user = child.getValue(Database.User.class);
+
+                                            user.setName(name);
+                                            String key = child.getKey();
+                                            db.userDb.child(key).setValue(user);
+                                            textName.setText(name);
+                                        }
+                                    }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
+                        Log.i("PROFILE", "changing name to: " + name);
+                        buildEvent.dismiss();
                     }
                 });
 
@@ -132,16 +140,23 @@ public class ProfileFragment extends Fragment {
                 bioChange.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String bio = changebio.getText().toString();
-                        if (bio.length() < 20) {
-                            Toast.makeText(getActivity(),
-                                    "Biography must be at least 20 characters. Try again.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Log.i("PROFILE", "changing bio to: " + bio);
-                            buildEvent.dismiss();
-                        }
+                        final String bio = changebio.getText().toString();
+                        db.userDb.orderByChild("username").equalTo(username)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren()){
+                                            Database.User user = child.getValue(Database.User.class);
+
+                                            user.setBio(bio);
+                                            String key = child.getKey();
+                                            db.userDb.child(key).setValue(user);
+                                            textBiography.setText(bio);
+                                        }
+                                    }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
+                        Log.i("PROFILE", "changing bio to: " + bio);
+                        buildEvent.dismiss();
                     }
                 });
 
@@ -173,18 +188,22 @@ public class ProfileFragment extends Fragment {
                 pwdChange.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        String password = changepwd.getText().toString();
-                        if (password.length() < 6) {
-                            Toast.makeText(getActivity(),
-                                    "Password must be at least 6 characters. Try again.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Log.i("PROFILE", "changing password to: " + password);
-                            Toast.makeText(getActivity(), "Password changed successfully.",
-                                    Toast.LENGTH_SHORT).show();
-                            buildEvent.dismiss();
-                        }
+                        final String password = changepwd.getText().toString();
+                        db.userDb.orderByChild("username").equalTo(username)
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot child : dataSnapshot.getChildren()){
+                                            Database.User user = child.getValue(Database.User.class);
+
+                                            user.setPassword(password);
+                                            String key = child.getKey();
+                                            db.userDb.child(key).setValue(user);
+                                        }
+                                    }
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
+                        Log.i("PROFILE", "changing password to: " + password);
+                        buildEvent.dismiss();
                     }
                 });
 

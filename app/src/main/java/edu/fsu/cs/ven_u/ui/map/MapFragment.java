@@ -66,6 +66,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION; //Handle for the Course Location permission
     boolean LocationPermissionGranted = false; //Used to determine if the user accepted location permissions
 
+    double eventLat;
+    double eventLon;
+
+    LatLng currentLocLatLng;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +99,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             getDeviceLocation();
         }
 
+        if(savedInstanceState != null)
+        {
+            eventLat = savedInstanceState.getDouble("lat");
+            eventLon = savedInstanceState.getDouble("lon");
+
+            if(savedInstanceState.getString("directions") != null)
+            {
+                LatLng eventDirections = new LatLng(eventLat, eventLon);
+                mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(eventDirections, 14));
+            }
+            else
+            {
+                LatLng eventDirections = new LatLng(eventLat, eventLon);
+                mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(eventDirections, 14));
+            }
+        }
+
         createEvent = root.findViewById(R.id.addEvent);
         //This section of code creates the Event
         createEvent.setOnClickListener(new View.OnClickListener() {
@@ -111,15 +133,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 intent.putExtra("LonID", longitude);
                 intent.putExtra("USER", user);
                 startActivity(intent);
-            }
-        });
-
-        //This needs to by synced with teh database to find an event
-        findEvent = root.findViewById(R.id.findEvent);
-        findEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 
@@ -194,7 +207,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                             mapAPI.addMarker(new MarkerOptions()
                                     .position(new LatLng(event.getLatitude(), event.getLongitude()))
-                                    .title("FSU"));
+                                    .title(event.getTitle()));
                         }
                     }
                     public void onCancelled(@NonNull DatabaseError databaseError) { }
@@ -220,7 +233,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     if (task.isSuccessful()) {
                         //Found Location
                         Location currentLocation = (Location) task.getResult();
-                        LatLng currentLocLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                        currentLocLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         mapAPI.moveCamera(CameraUpdateFactory.newLatLng(currentLocLatLng));
                         mapAPI.animateCamera(CameraUpdateFactory.zoomTo(17));
                     } else {
