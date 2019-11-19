@@ -10,6 +10,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Database {
     private final String EVENT_DB = "events";
     private final String USER_DB = "users";
@@ -83,6 +87,39 @@ public class Database {
             Log.e(TAG,"Error in removeEvent: " + e.getMessage());
         }
     }
+    public void inviteUser(final String title, final String creator, final String username){
+        try{
+            //Search database by title first
+            eventDb.orderByChild("title").equalTo(title)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot child : dataSnapshot.getChildren()){
+                                Event event = child.getValue(Event.class);
+                                //If a database entry with a matching title and username
+                                //is found, add user to invites(assume username is valid;
+                                //check when used.
+                                if(creator.equals(event.creator)) {
+                                    StringBuilder s = new StringBuilder(event.invited);
+                                    if(event.invited.length() == 0){
+                                        s.append(username);
+                                    }
+                                    else{
+                                        s.append(", ");
+                                        s.append(username);
+                                    }
+                                    event.invited = s.toString();
+                                    String key = child.getKey();
+                                    eventDb.child(key).setValue(event);
+                                }
+                            }
+                        }
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    });
+        }
+        catch(Exception e){
+            Log.e(TAG,"Error in inviteUser: " + e.getMessage());
+        }
+    }
     public void addUser(final User user){
         try{
 
@@ -136,6 +173,7 @@ public class Database {
         private double latitude;
         private double longitude;
         private String visibility;
+        private String invited;
 
         public Event() {
             this.title = null;
@@ -146,6 +184,7 @@ public class Database {
             this.latitude = 0;
             this.longitude = 0;
             this.visibility = null;
+            this.invited = "";
         }
         public Event(String title, String description, String creator, String start_time,
                      String end_time, double latitude, double longitude, String visibility){
@@ -157,6 +196,7 @@ public class Database {
             this.latitude = latitude;
             this.longitude = longitude;
             this.visibility = visibility;
+            this.invited = "";
         }
         public Event(String title, String description, String creator,
                      double latitude, double longitude, String visibility){
@@ -168,6 +208,7 @@ public class Database {
             this.latitude = latitude;
             this.longitude = longitude;
             this.visibility = visibility;
+            this.invited = "";
         }
         public String getTitle() {
             return title;
@@ -217,6 +258,30 @@ public class Database {
         public void setVisibility(String visibility) {
             this.visibility = visibility;
         }
+        public String getInvited(){
+            return invited;
+        }
+        public void setInvited(String invited){
+            this.invited = invited;
+        }
+
+        public String[] findInvitedUsers() {
+            ArrayList<String> list = new ArrayList<>();
+            int i = 0;
+            while(invited.length() > i && i >= 0){
+                if(invited.indexOf(",", i) >= 0) {
+                    list.add(invited.substring(i, invited.indexOf(",", i)));
+                }
+                else {
+                    list.add(invited.substring(invited.lastIndexOf(",") + 2));
+                    break;
+                }
+                i = invited.indexOf(",", i) + 2;
+            }
+
+            return list.toArray(new String[0]);
+        }
+
     }
     public static class User {
         private String name;
