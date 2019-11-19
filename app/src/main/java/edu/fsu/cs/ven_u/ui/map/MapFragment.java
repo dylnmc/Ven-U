@@ -136,15 +136,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
-        //This needs to by synced with teh database to find an event
-        findEvent = root.findViewById(R.id.findEvent);
-        findEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
         // setup google map autocomplete search
         // https://developers.google.com/places/android-sdk/autocomplete#add_a_placeselectionlistener_to_an_activity
         // https://stackoverflow.com/questions/54774648/im-using-the-new-places-sdk-in-android-the-autocompletesupportfragment-and-it
