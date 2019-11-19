@@ -183,9 +183,7 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         directions_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (popupWindow.isShowing()) {
-                    popupWindow.dismiss();
-                }
+                // start maps intent passing location as query
                 Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse("geo:0,0?q=" + lat + "," + lon + " (" + title_view.getText().toString() + ")"));
                 startActivity(intent);
@@ -207,7 +205,10 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                 MapFragment mpFrag = new MapFragment();
                 mpFrag.setArguments(directions);
                 fragTrans.replace(R.id.nav_host_fragment, mpFrag);
-                fragTrans.commit();
+                fragTrans.setPrimaryNavigationFragment(mpFrag);
+                fragTrans.setReorderingAllowed(true);
+                fragTrans.commitNowAllowingStateLoss();
+                // fragTrans.commit();
             }
         });
 
