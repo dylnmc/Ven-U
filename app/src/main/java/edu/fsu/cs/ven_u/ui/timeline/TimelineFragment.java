@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import edu.fsu.cs.ven_u.Database;
 import edu.fsu.cs.ven_u.R;
 import edu.fsu.cs.ven_u.TimelineItem;
 import edu.fsu.cs.ven_u.TimelineRecyclerAdapter;
+import edu.fsu.cs.ven_u.ui.map.MapFragment;
 
 public class TimelineFragment extends Fragment implements TimelineRecyclerAdapter.OnTimelineItemListener {
     private String TAG = "TIMELINE_FRAGMENT";
@@ -185,7 +187,12 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                 directions.putDouble("lat", lat);
                 directions.putDouble("long", lon);
                 directions.putString("directions", "directions");
-                Navigation.findNavController(view).navigate(R.id.navigation_map, directions);
+                FragmentTransaction fragTrans = getActivity().getSupportFragmentManager()
+                        .beginTransaction();
+                MapFragment mpFrag = new MapFragment();
+                mpFrag.setArguments(directions);
+                fragTrans.replace(R.id.nav_host_fragment, mpFrag);
+                fragTrans.commit();
             }
         });
 
@@ -196,7 +203,12 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                 directions.putDouble("lat", lat);
                 directions.putDouble("long", lon);
                 directions.putString("show", "show");
-                Navigation.findNavController(view).navigate(R.id.navigation_map, directions);
+                FragmentTransaction fragTrans = getActivity().getSupportFragmentManager()
+                        .beginTransaction();
+                MapFragment mpFrag = new MapFragment();
+                mpFrag.setArguments(directions);
+                fragTrans.replace(R.id.nav_host_fragment, mpFrag);
+                fragTrans.commit();
             }
         });
 
