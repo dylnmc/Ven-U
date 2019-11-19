@@ -152,7 +152,9 @@ public class LoginFragment extends Fragment {
                             }
                         }
                     }
-                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getActivity(), "db error", Toast.LENGTH_LONG).show();
+                    }
                 });
     }
 
