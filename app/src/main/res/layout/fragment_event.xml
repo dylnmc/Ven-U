@@ -12,32 +12,33 @@
         android:layout_centerHorizontal="true"
         >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/event_title"
-            android:text="Temp text"
-            android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
-            android:textSize="32sp"
-            android:textStyle="bold"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_title"
+        android:text="Temp text"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        style="@style/AppTheme"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/event_desc"
-            android:text="Temp text"
-            android:textStyle="italic"
-            android:min="3"
-            android:layout_alignStart="@id/event_title"
-            android:layout_alignLeft="@id/event_title"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-            android:padding="4dp"
-            android:layout_below="@id/event_title"
-            android:background="@drawable/border"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_desc"
+        android:text="Temp text"
+        android:layout_below="@id/event_title"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignStart="@id/event_title"
+        android:layout_alignLeft="@id/event_title"
+        android:textStyle="italic"
+        style="@style/AppTheme"
+        android:background="@drawable/border"
+        />
 
         <TextView
             android:layout_width="wrap_content"
@@ -145,7 +146,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/location_text"
             android:layout_alignTop="@id/location_text"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true"
             android:layout_toEndOf="@id/location_text"
             android:layout_toRightOf="@id/location_text"

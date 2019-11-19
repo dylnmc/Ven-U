@@ -21,6 +21,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_centerVertical="true"
+            style="@style/AppTheme"
             />
 
         <TextView
@@ -30,6 +31,7 @@
             android:layout_alignParentRight="true"
             android:text="TextView"
             android:layout_centerVertical="true"
+            style="@style/AppTheme"
             />
 
     </RelativeLayout>

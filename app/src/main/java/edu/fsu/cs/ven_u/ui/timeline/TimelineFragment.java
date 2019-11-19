@@ -130,8 +130,7 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         // https://stackoverflow.com/questions/18461990/pop-up-window-to-display-some-stuff-in-a-fragment
         View popupView = getLayoutInflater().inflate(R.layout.fragment_event, null);
         final PopupWindow popupWindow = new PopupWindow(popupView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         TimelineItem item = timelineItems.get(position);
 
@@ -172,7 +171,7 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         int location[] = new int[2];
         View anchorView = getView();
         anchorView.getLocationOnScreen(location);
-        popupWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY, location[0], location[1] + anchorView.getHeight());
+        popupWindow.showAtLocation(anchorView, Gravity.FILL, 0, 0);
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override

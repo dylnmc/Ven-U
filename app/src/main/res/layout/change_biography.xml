@@ -9,45 +9,61 @@ android:layout_marginTop="15dp"
 android:layout_marginLeft="15dp"
 android:layout_marginRight="15dp"
 android:layout_marginBottom="15dp" >
-
-<EditText
-    android:id="@+id/edit_change_bio"
-    android:hint="@string/biography"
-    android:layout_width="250dp"
-    android:layout_height="wrap_content"
-    android:gravity="top|center"
-    android:importantForAutofill="no"
-    android:inputType="textMultiLine"
-    android:ems="10"
-    app:layout_constraintHorizontal_bias="0.5"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:maxLines="6"
-    android:minLines="4"
-    android:background="@drawable/border"
-    android:padding="10dp"
-    android:textSize="14sp"
-    android:lines="5"
-    />
-
-    <Button
-        android:id="@+id/button_confirm_biochange"
+    <TextView
+        android:id="@+id/textChangePassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:text="@string/change"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_change_bio" />
+        android:text="@string/change_password"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/AppTheme" />
+
+    <EditText
+        android:id="@+id/edit_change_bio"
+        android:hint="@string/biography"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:gravity="top|center"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textChangePassword"
+        android:maxLines="6"
+        android:minLines="4"
+        android:background="@drawable/border"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:lines="5"
+        android:layout_marginTop="15dp"
+        />
 
     <Button
         android:id="@+id/button_cancel_biochange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/cancel"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_change_bio" />
+
+    <Button
+        android:id="@+id/button_confirm_biochange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/change"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_change_bio" />

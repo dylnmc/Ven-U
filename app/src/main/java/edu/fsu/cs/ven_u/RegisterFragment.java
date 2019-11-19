@@ -157,6 +157,13 @@ public class RegisterFragment extends Fragment {
                                 return;
                             }
 
+                            if (biography.length() < 20) {
+                                Toast.makeText(getActivity(),
+                                        "Biography must be at least 20 characters. Try again.",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             Database.User user = new Database.User(name, username, biography, password);
                             db.addUser(user);
                             Intent intent = new Intent(getActivity(), NavigationActivity.class);
