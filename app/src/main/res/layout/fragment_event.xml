@@ -17,7 +17,8 @@
         android:layout_marginLeft="30dp"
         android:layout_marginTop="20dp"
         android:textSize="32sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        style="@style/AppTheme"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,7 +31,8 @@
         android:layout_marginTop="20dp"
         android:layout_alignStart="@id/event_title"
         android:layout_alignLeft="@id/event_title"
-        android:textStyle="italic" />
+        android:textStyle="italic"
+        style="@style/AppTheme"/>
 
 
     <TextView
@@ -43,7 +45,9 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="40dp"
         android:layout_alignStart="@id/event_desc"
-        android:layout_alignLeft="@id/event_desc"/>
+        android:layout_alignLeft="@id/event_desc"
+        style="@style/AppTheme"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,7 +57,8 @@
         android:layout_toEndOf="@id/creator_text"
         android:layout_alignBaseline="@id/creator_text"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        style="@style/AppTheme"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,7 +70,9 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="20dp"
         android:layout_alignStart="@id/creator_text"
-        android:layout_alignLeft="@id/creator_text"/>
+        android:layout_alignLeft="@id/creator_text"
+        style="@style/AppTheme"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -75,7 +82,8 @@
         android:layout_toEndOf="@id/start_text"
         android:layout_alignBaseline="@id/start_text"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        style="@style/AppTheme"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -87,7 +95,9 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="20dp"
         android:layout_alignStart="@id/start_text"
-        android:layout_alignLeft="@id/start_text"/>
+        android:layout_alignLeft="@id/start_text"
+        style="@style/AppTheme"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,7 +107,8 @@
         android:layout_toEndOf="@id/end_text"
         android:layout_alignBaseline="@id/end_text"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        style="@style/AppTheme"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -109,7 +120,9 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="20dp"
         android:layout_alignStart="@id/end_text"
-        android:layout_alignLeft="@id/end_text"/>
+        android:layout_alignLeft="@id/end_text"
+        style="@style/AppTheme"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -119,16 +132,18 @@
         android:layout_toEndOf="@id/visibility_text"
         android:layout_alignBaseline="@id/visibility_text"
         android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"/>
+        android:layout_marginLeft="5dp"
+        style="@style/AppTheme"/>
 
     <Button
         android:id="@+id/button_close_viewevent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:text="@string/close"
+        android:background="@drawable/button"
         android:layout_below="@id/visibility_text"
         android:layout_centerHorizontal="true"
         />

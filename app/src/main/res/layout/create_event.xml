@@ -9,6 +9,23 @@
     android:layout_marginRight="15dp"
     android:layout_marginBottom="15dp">
 
+    <TextView
+        android:id="@+id/textCreateNewEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/addEvent"
+        android:gravity="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/eventName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/AppTheme" />
+
     <EditText
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
@@ -22,7 +39,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/textCreateNewEvent"
+        android:layout_marginTop="10dp"  />
 
     <EditText
         android:id="@+id/eventDesc"
@@ -30,7 +48,7 @@
         android:layout_height="200dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:padding="10dp"
@@ -52,12 +70,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/eventType"
         app:layout_constraintBottom_toTopOf="@+id/eventType"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/eventDesc" />
+        app:layout_constraintTop_toBottomOf="@id/eventDesc"
+        style="@style/AppTheme" />
 
     <RadioGroup
         android:id="@+id/eventType"
@@ -72,19 +91,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/publicEvent" />
+            android:text="@string/publicEvent"
+            style="@style/AppTheme" />
 
         <RadioButton
             android:id="@+id/eventProtected"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/protectedEvent" />
+            android:text="@string/protectedEvent"
+            style="@style/AppTheme" />
 
         <RadioButton
             android:id="@+id/eventPrivate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/privateEvent" />
+            android:text="@string/privateEvent"
+            style="@style/AppTheme" />
 
     </RadioGroup>
 
@@ -93,6 +115,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create"
+        android:background="@drawable/button"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventType" />
@@ -102,6 +126,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
+        android:background="@drawable/button"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventType" />

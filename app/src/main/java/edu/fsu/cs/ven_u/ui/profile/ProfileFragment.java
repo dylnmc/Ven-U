@@ -132,8 +132,15 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         String bio = changebio.getText().toString();
-                        Log.i("PROFILE", "changing bio to: " + bio);
-                        buildEvent.dismiss();
+                        if (bio.length() < 20) {
+                            Toast.makeText(getActivity(),
+                                    "Biography must be at least 20 characters. Try again.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Log.i("PROFILE", "changing bio to: " + bio);
+                            buildEvent.dismiss();
+                        }
                     }
                 });
 
