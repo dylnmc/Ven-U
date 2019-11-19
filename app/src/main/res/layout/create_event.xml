@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:digits="0123456789qwertzuiopasdfghjklyxcvbnm_-."
+        android:digits="0123456789qwertzuiopasdfghjklyxcvbnm_
+        -.QWERTYUIOPASDFGHJKLZXCVBNM"
         android:ems="10"
         android:hint="@string/eventName"
         android:importantForAutofill="no"
