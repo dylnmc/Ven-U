@@ -1,21 +1,16 @@
 package edu.fsu.cs.ven_u.ui.map;
 
 import android.Manifest;
-import android.app.Dialog;
-
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +18,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -36,13 +33,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Arrays;
+
 import edu.fsu.cs.ven_u.Database;
 import edu.fsu.cs.ven_u.NavigationActivity;
 import edu.fsu.cs.ven_u.R;
+import edu.fsu.cs.ven_u.TimelineItem;
+import edu.fsu.cs.ven_u.TimelineRecyclerAdapter;
+import edu.fsu.cs.ven_u.ui.timeline.TimelineFragment;
 
 import static android.content.ContentValues.TAG;
 
@@ -59,10 +66,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION; //Handle for the Course Location permission
     boolean LocationPermissionGranted = false; //Used to determine if the user accepted location permissions
 
-    //****Holds the information for the event a user will create. This needs to be added as a new record in the database if populated****
-    String eventName; //Name
-    String eventType; //Type
-    String eventDesc; //Description
+    double eventLat;
+    double eventLon;
+
+    LatLng currentLocLatLng;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,77 +96,43 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             != PackageManager.PERMISSION_GRANTED) {
                 mapAPI.setMyLocationEnabled(true);
             }
-            //This will get the device's last known location
             getDeviceLocation();
         }
 
-        createEvent = root.findViewById(R.id.addEvent);
+        if(savedInstanceState != null)
+        {
+            eventLat = savedInstanceState.getDouble("lat");
+            eventLon = savedInstanceState.getDouble("lon");
 
+            if(savedInstanceState.getString("directions") != null)
+            {
+                LatLng eventDirections = new LatLng(eventLat, eventLon);
+                mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(eventDirections, 14));
+            }
+            else
+            {
+                LatLng eventDirections = new LatLng(eventLat, eventLon);
+                mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(eventDirections, 14));
+            }
+        }
+
+        createEvent = root.findViewById(R.id.addEvent);
         //This section of code creates the Event
         createEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final Dialog buildEvent = new Dialog(getContext());
-                buildEvent.setContentView(R.layout.create_event);
-                buildEvent.setTitle("Create Event");
+                final LatLng eventPostion = mapAPI.getCameraPosition().target;
+                final double lattitude = eventPostion.latitude;
+                final double longitude = eventPostion.longitude;
+                final String user = ((NavigationActivity)getActivity()).getCurrentUsername();
 
-                //Handle on dialog views
-                final EditText evntName = buildEvent.findViewById(R.id.eventName);
-                final EditText evntDesc = buildEvent.findViewById(R.id.eventDesc);
-                final RadioGroup evntType = buildEvent.findViewById(R.id.eventType);
 
-                Button eventAccept = buildEvent.findViewById(R.id.eventCreate);
-                Button eventCancel = buildEvent.findViewById(R.id.eventCancel);
-
-                eventAccept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (evntName.getText().toString().length() < 5) {
-                            Toast.makeText(getActivity(), "Please create an Event name at least 5 characters long",
-                                    Toast.LENGTH_SHORT).show();
-                        } else if (evntDesc.getText().toString().length() < 20) {
-                            Toast.makeText(getActivity(), "Please write a description at least 20 characters long",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Setting the event up
-                            //Below or after this information needs to be sent to the database
-                            //Things most likely needed to be recorded,
-                            // 1. Event Host Name
-                            // 2. Event Name
-                            // 3. Event Type
-                            // 4. Event Desc
-                            eventName = evntName.getText().toString();
-                            eventDesc = evntDesc.getText().toString();
-                            RadioButton radButton = buildEvent.findViewById(evntType.getCheckedRadioButtonId());
-                            eventType = radButton.getText().toString();
-
-                            //Create marker at the center of the map, adds the event title.
-                            LatLng eventPosition = mapAPI.getCameraPosition().target;
-                            mapAPI.addMarker(new MarkerOptions().position(eventPosition).title(eventName));
-                            mapAPI.moveCamera(CameraUpdateFactory.newLatLng(eventPosition));
-                            mapAPI.animateCamera(CameraUpdateFactory.zoomTo(19));
-
-                            final Database db = new Database();
-                            Database.Event event = new Database.Event(eventName,eventDesc,
-                                    ((NavigationActivity)getActivity()).getCurrentUsername(),
-                                    eventPosition.latitude, eventPosition.longitude, eventType);
-                            db.addEvent(event);
-                            buildEvent.dismiss();
-                        }
-                    }
-                });
-
-                //OnClick dialog cancel
-                eventCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        buildEvent.dismiss();
-                    }
-                });
-
-                buildEvent.setCancelable(false);
-                buildEvent.show();
+                Intent intent = new Intent(getActivity(), CreateEvent.class);
+                intent.putExtra("LatID", lattitude);
+                intent.putExtra("LonID", longitude);
+                intent.putExtra("USER", user);
+                startActivity(intent);
             }
         });
 
@@ -168,8 +141,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         findEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Set Up find Event",
-                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        // setup google map autocomplete search
+        // https://developers.google.com/places/android-sdk/autocomplete#add_a_placeselectionlistener_to_an_activity
+        // https://stackoverflow.com/questions/54774648/im-using-the-new-places-sdk-in-android-the-autocompletesupportfragment-and-it
+        // https://stackoverflow.com/questions/14654758/google-places-api-request-denied-for-android-autocomplete-even-with-the-right-a
+        // https://developers.google.com/places/android-sdk/autocomplete#constrain_autocomplete_results
+        // https://developers.google.com/places/android-sdk/reference/com/google/android/libraries/places/widget/AutocompleteSupportFragment
+        // https://iteritory.com/android-google-places-autocomplete-feature-using-new-places-sdk/?fbclid=IwAR3-nV3ELTilG_W79xmC-UhI9Gkag58Odykg0fW8THisBH7aNb46PCmAnz4
+        // https://stackoverflow.com/questions/56400963/google-places-autocomplete-cant-load-search-results
+
+        Resources res = getResources();
+
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.mapAutocomplete);
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), res.getString(R.string.map_key));
+        }
+        PlacesClient placesClient = Places.createClient(getActivity());
+
+        // Specify the types of place data to return.
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG));
+
+        // Set up a PlaceSelectionListener to handle the response.
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                LatLng latlon = place.getLatLng();
+                Log.i(TAG, "Place: " + place.getName() + " @ " + latlon.toString());
+                mapAPI.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon, 14));
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Log.e(TAG, "An error occurred: " + status);
             }
         });
 
@@ -189,7 +199,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true); //this is the key ingredient to show the
+        builder.setAlwaysShow(true); //this is the key ingredient to show the map
+
+        // Add markers
+        final Database db = new Database();
+        db.eventDb.orderByChild("title")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        // For each child
+                        for(DataSnapshot child : dataSnapshot.getChildren()) {
+                            Database.Event event = child.getValue(Database.Event.class);
+                            //Create location object
+                            Location location = new Location(event.getTitle());
+                            location.setLatitude(event.getLatitude());
+                            location.setLongitude(event.getLongitude());
+
+                            mapAPI.addMarker(new MarkerOptions()
+                                    .position(new LatLng(event.getLatitude(), event.getLongitude()))
+                                    .title(event.getTitle()));
+                        }
+                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                });
+
 
         //Marker example
 //        LatLng FSU = new LatLng(30.441365, -84.298080);
@@ -210,7 +242,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     if (task.isSuccessful()) {
                         //Found Location
                         Location currentLocation = (Location) task.getResult();
-                        LatLng currentLocLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                        currentLocLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                         mapAPI.moveCamera(CameraUpdateFactory.newLatLng(currentLocLatLng));
                         mapAPI.animateCamera(CameraUpdateFactory.zoomTo(17));
                     } else {

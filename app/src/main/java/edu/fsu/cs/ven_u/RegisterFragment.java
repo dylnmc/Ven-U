@@ -138,12 +138,12 @@ public class RegisterFragment extends Fragment {
         db.userDb.orderByChild("username").equalTo(username)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Toast.makeText(getActivity(), "on data change", Toast.LENGTH_SHORT).show();
                         //For all entries with given title
                         if(dataSnapshot.getChildrenCount() != 0) {
                             Toast.makeText(getActivity(), "Username taken. Try again.",
                                     Toast.LENGTH_SHORT).show();
-                        }
-                        else{
+                        } else{
                             if (password.length() < 6) {
                                 Toast.makeText(getActivity(),
                                         "Password must be at least 6 characters. Try again.",
@@ -157,14 +157,24 @@ public class RegisterFragment extends Fragment {
                                 return;
                             }
 
+                            if (biography.length() < 20) {
+                                Toast.makeText(getActivity(),
+                                        "Biography must be at least 20 characters. Try again.",
+                                        Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
                             Database.User user = new Database.User(name, username, biography, password);
                             db.addUser(user);
                             Intent intent = new Intent(getActivity(), NavigationActivity.class);
                             intent.putExtra("username", username);
+                            Toast.makeText(getActivity(), "logging in user " + username, Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                         }
                     }
-                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Toast.makeText(getActivity(), "db error", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 
