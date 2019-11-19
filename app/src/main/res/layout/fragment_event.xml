@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@drawable/edit_text_border"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".EventFragment"
+        android:layout_centerHorizontal="true"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_title"
+        android:text="Temp text"
+        android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        style="@style/AppTheme"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/event_desc"
+        android:text="Temp text"
+        android:layout_below="@id/event_title"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignStart="@id/event_title"
+        android:layout_alignLeft="@id/event_title"
+        android:textStyle="italic"
+        style="@style/AppTheme"
+        android:background="@drawable/border"
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/creator_text"
+            android:text="Made by:"
+            android:layout_below="@id/event_desc"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignStart="@id/event_desc"
+            android:layout_alignLeft="@id/event_desc"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_creator"
+            android:text="Temp text"
+            android:layout_toRightOf="@id/creator_text"
+            android:layout_toEndOf="@id/creator_text"
+            android:layout_alignBaseline="@id/creator_text"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/start_text"
+            android:text="Starts at:"
+            android:layout_below="@id/event_creator"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignStart="@id/creator_text"
+            android:layout_alignLeft="@id/creator_text"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_start"
+            android:text="Temp text"
+            android:layout_toRightOf="@id/start_text"
+            android:layout_toEndOf="@id/start_text"
+            android:layout_alignBaseline="@id/start_text"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/end_text"
+            android:text="Ends at: "
+            android:layout_below="@id/event_start"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignStart="@id/start_text"
+            android:layout_alignLeft="@id/start_text"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_end"
+            android:text="Temp text"
+            android:layout_toRightOf="@id/end_text"
+            android:layout_toEndOf="@id/end_text"
+            android:layout_alignBaseline="@id/end_text"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/visibility_text"
+            android:text="Visibility:"
+            android:layout_below="@id/event_end"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignStart="@id/end_text"
+            android:layout_alignLeft="@id/end_text"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/event_visibility"
+            android:text="Temp text"
+            android:layout_toRightOf="@id/visibility_text"
+            android:layout_toEndOf="@id/visibility_text"
+            android:layout_alignBaseline="@id/visibility_text"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/location_text"
+            android:text="Location:"
+            android:layout_below="@id/event_visibility"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignStart="@id/end_text"
+            android:layout_alignLeft="@id/end_text"
+            />
+        <TextView
+            android:id="@+id/event_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/location_text"
+            android:layout_alignTop="@id/location_text"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@id/location_text"
+            android:layout_toRightOf="@id/location_text"
+            android:layout_alignStart="@id/end_text"
+            android:layout_alignLeft="@id/end_text"
+            android:text="Temp text"
+            />
+
+        <Button
+            android:id="@+id/button_close_viewevent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/close"
+            android:layout_below="@id/event_location"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+</ScrollView>

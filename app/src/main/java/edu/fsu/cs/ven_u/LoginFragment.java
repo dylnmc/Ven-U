@@ -146,7 +146,6 @@ public class LoginFragment extends Fragment {
                             }
                             //Success
                             else{
-                                Toast.makeText(getActivity(), "db error", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(getActivity(), NavigationActivity.class);
                                 intent.putExtra("username", username);
                                 startActivity(intent);

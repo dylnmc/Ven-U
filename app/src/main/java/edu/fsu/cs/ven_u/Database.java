@@ -133,9 +133,9 @@ public class Database {
         private String creator;
         private String start_time;
         private String end_time;
-        private int latitude;
-        private int longitude;
-        private int visibility;
+        private double latitude;
+        private double longitude;
+        private String visibility;
 
         public Event() {
             this.title = null;
@@ -145,15 +145,26 @@ public class Database {
             this.end_time = null;
             this.latitude = 0;
             this.longitude = 0;
-            this.visibility = 0;
+            this.visibility = null;
         }
         public Event(String title, String description, String creator, String start_time,
-                     String end_time, int latitude, int longitude, int visibility){
+                     String end_time, double latitude, double longitude, String visibility){
             this.title = title;
             this.description = description;
             this.creator = creator;
             this.start_time = start_time;
             this.end_time = end_time;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.visibility = visibility;
+        }
+        public Event(String title, String description, String creator,
+                     double latitude, double longitude, String visibility){
+            this.title = title;
+            this.description = description;
+            this.creator = creator;
+            this.start_time = null;
+            this.end_time = null;
             this.latitude = latitude;
             this.longitude = longitude;
             this.visibility = visibility;
@@ -188,22 +199,22 @@ public class Database {
         public void setEndTime(String end_time) {
             this.end_time = end_time;
         }
-        public int getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
-        public void setLatitude(int latitude) {
+        public void setLatitude(double latitude) {
             this.latitude = latitude;
         }
-        public int getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
-        public void setLongitude(int longitude) {
+        public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
-        public int getVisibility() {
+        public String getVisibility() {
             return visibility;
         }
-        public void setVisibility(int visibility) {
+        public void setVisibility(String visibility) {
             this.visibility = visibility;
         }
     }
