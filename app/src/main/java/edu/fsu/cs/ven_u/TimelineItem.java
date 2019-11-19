@@ -5,12 +5,20 @@ public class TimelineItem {
     private String mVisibility;
     private String mCreator;
     private String mDescription;
+    private String mStart;
+    private String mEnd;
+    private double mLatitude;
+    private double mLongitude;
 
-    public TimelineItem(String title, String visibility, String creator, String description) {
+    public TimelineItem(String title, String vis, String creator, String desc, String start, String end, double lat, double lon) {
         mTitle = title;
-        mVisibility = visibility;
+        mVisibility = vis;
         mCreator = creator;
-        mDescription = description;
+        mDescription = desc;
+        mStart = start;
+        mEnd = end;
+        mLatitude = lat;
+        mLongitude = lon;
     }
 
     public String getTitle() {
@@ -27,5 +35,21 @@ public class TimelineItem {
 
     public String getDescription() {
         return mDescription;
+    }
+
+    public String getStart() {
+        return mStart;
+    }
+
+    public String getEnd() {
+        return mEnd;
+    }
+
+    public double getLatitude() {
+        return mLatitude;
+    }
+
+    public double getLongitude() {
+        return mLongitude;
     }
 }
