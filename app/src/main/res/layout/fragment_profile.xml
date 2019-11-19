@@ -8,21 +8,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="50dp"
-        >
-
+        android:padding="50dp">
 
         <TextView
             android:id="@+id/text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="15dp"
-            android:text="John Doe"
             android:textSize="20dp"
             app:layout_constraintEnd_toStartOf="@+id/text_name_edit"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/AppTheme" />
 
         <TextView
             android:id="@+id/text_name_edit"
@@ -38,17 +36,16 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/text_name" />
 
-
         <TextView
             android:id="@+id/text_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="\@"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_name" />
+            app:layout_constraintTop_toBottomOf="@+id/text_name"
+            style="@style/AppTheme" />
 
         <TextView
             android:id="@+id/text_biography"
@@ -57,11 +54,11 @@
             android:layout_margin="20dp"
             android:background="@drawable/border"
             android:padding="20dp"
-            android:text="This is a test biography hello I am typing to take up space hello hi"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_username" />
+            app:layout_constraintTop_toBottomOf="@+id/text_username"
+            style="@style/AppTheme" />
 
         <TextView
             android:id="@+id/text_biography_edit"
@@ -82,9 +79,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Change Password"
+            android:background="@drawable/button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_biography_edit" />
+            app:layout_constraintTop_toBottomOf="@+id/text_biography_edit"
+            android:padding="10sp" />
 
         <Button
             android:id="@+id/button_view_events"
@@ -92,9 +91,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="View Events"
+            android:background="@drawable/button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_change_password" />
+            app:layout_constraintTop_toBottomOf="@+id/button_change_password"
+            android:padding="10sp" />
 
         <ListView
             android:id="@+id/list_view_events"

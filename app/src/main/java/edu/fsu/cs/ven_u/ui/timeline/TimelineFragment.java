@@ -3,6 +3,8 @@ package edu.fsu.cs.ven_u.ui.timeline;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +32,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.fsu.cs.ven_u.Database;
 import edu.fsu.cs.ven_u.EventFragment;
@@ -88,8 +92,16 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
 
                             //Check if within radius(currently 5 miles)
                             if(current_location.distanceTo(location) <= RADIUS){
-                                timelineItems.add(new TimelineItem(event.getTitle(),
-                                        event.getVisibility(), event.getCreator(), event.getDescription()));
+                                timelineItems.add(new TimelineItem(
+                                        event.getTitle(),
+                                        event.getVisibility(),
+                                        event.getCreator(),
+                                        event.getDescription(),
+                                        event.getStartTime(),
+                                        event.getEndTime(),
+                                        event.getLatitude(),
+                                        event.getLongitude()
+                                ));
                             }
                         }
                         mRecyclerView = root.findViewById(R.id.recyclerView);
@@ -99,7 +111,7 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                         //If no events found, insert message
                         if(timelineItems.size() == 0) {
                             timelineItems.add(new TimelineItem(
-                                    "No events found", "", "", ""));
+                                    "No events found", "", "", "", "", "", 0.0, 0.0));
                         }
                         mAdapter = new TimelineRecyclerAdapter(timelineItems, TimelineFragment.this);
                         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -117,9 +129,9 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
     public void onItemClick(int position) {
         // https://stackoverflow.com/questions/18461990/pop-up-window-to-display-some-stuff-in-a-fragment
         View popupView = getLayoutInflater().inflate(R.layout.fragment_event, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final PopupWindow popupWindow = new PopupWindow(popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        EventFragment eventFragment = new EventFragment();
         TimelineItem item = timelineItems.get(position);
 
         TextView title_view = popupView.findViewById(R.id.event_title);
@@ -128,20 +140,38 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         TextView visibility_view = popupView.findViewById(R.id.event_visibility);
         TextView start_view = popupView.findViewById(R.id.event_start);
         TextView end_view = popupView.findViewById(R.id.event_end);
+        TextView location_view = popupView.findViewById(R.id.event_location);
         Button close_btn = popupView.findViewById(R.id.button_close_viewevent);
 
         title_view.setText(item.getTitle());
         desc_view.setText(item.getDescription());
         creator_view.setText(item.getCreator());
         visibility_view.setText(item.getVisibility());
-
+        start_view.setText(item.getStart());
+        end_view.setText(item.getEnd());
+        Geocoder geo = new Geocoder(getContext());
+        double lat = item.getLatitude();
+        double lon = item.getLongitude();
+        List<Address> addresses = null;
+        try {
+            addresses = geo.getFromLocation(lat, lon, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String locStr;
+        if (addresses != null) {
+            locStr = "\n" + addresses.get(0).getAddressLine(0);
+        } else {
+            locStr = String.format("%.2f, %.2f", lat, lon);
+        }
+        location_view.setText(locStr);
         popupWindow.setFocusable(true);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
 
         int location[] = new int[2];
         View anchorView = getView();
         anchorView.getLocationOnScreen(location);
-        popupWindow.showAtLocation(anchorView, Gravity.CENTER_HORIZONTAL, location[0], 0 /* location[1] + anchorView.getHeight() */);
+        popupWindow.showAtLocation(anchorView, Gravity.FILL, 0, 0);
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override

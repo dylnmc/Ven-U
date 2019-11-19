@@ -1,21 +1,18 @@
 package edu.fsu.cs.ven_u.ui.map;
 
 import android.Manifest;
-import android.app.Dialog;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,12 +30,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
 import edu.fsu.cs.ven_u.Database;
 import edu.fsu.cs.ven_u.NavigationActivity;
@@ -58,11 +51,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION; //Handle for the Fine Location permission
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION; //Handle for the Course Location permission
     boolean LocationPermissionGranted = false; //Used to determine if the user accepted location permissions
-
-    //****Holds the information for the event a user will create. This needs to be added as a new record in the database if populated****
-    String eventName; //Name
-    String eventType; //Type
-    String eventDesc; //Description
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,77 +77,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             != PackageManager.PERMISSION_GRANTED) {
                 mapAPI.setMyLocationEnabled(true);
             }
-            //This will get the device's last known location
             getDeviceLocation();
         }
 
         createEvent = root.findViewById(R.id.addEvent);
-
         //This section of code creates the Event
         createEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final Dialog buildEvent = new Dialog(getContext());
-                buildEvent.setContentView(R.layout.create_event);
-                buildEvent.setTitle("Create Event");
+                final LatLng eventPostion = mapAPI.getCameraPosition().target;
+                final double lattitude = eventPostion.latitude;
+                final double longitude = eventPostion.longitude;
+                final String user = ((NavigationActivity)getActivity()).getCurrentUsername();
 
-                //Handle on dialog views
-                final EditText evntName = buildEvent.findViewById(R.id.eventName);
-                final EditText evntDesc = buildEvent.findViewById(R.id.eventDesc);
-                final RadioGroup evntType = buildEvent.findViewById(R.id.eventType);
 
-                Button eventAccept = buildEvent.findViewById(R.id.eventCreate);
-                Button eventCancel = buildEvent.findViewById(R.id.eventCancel);
-
-                eventAccept.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (evntName.getText().toString().length() < 5) {
-                            Toast.makeText(getActivity(), "Please create an Event name at least 5 characters long",
-                                    Toast.LENGTH_SHORT).show();
-                        } else if (evntDesc.getText().toString().length() < 20) {
-                            Toast.makeText(getActivity(), "Please write a description at least 20 characters long",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            //Setting the event up
-                            //Below or after this information needs to be sent to the database
-                            //Things most likely needed to be recorded,
-                            // 1. Event Host Name
-                            // 2. Event Name
-                            // 3. Event Type
-                            // 4. Event Desc
-                            eventName = evntName.getText().toString();
-                            eventDesc = evntDesc.getText().toString();
-                            RadioButton radButton = buildEvent.findViewById(evntType.getCheckedRadioButtonId());
-                            eventType = radButton.getText().toString();
-
-                            //Create marker at the center of the map, adds the event title.
-                            LatLng eventPosition = mapAPI.getCameraPosition().target;
-                            mapAPI.addMarker(new MarkerOptions().position(eventPosition).title(eventName));
-                            mapAPI.moveCamera(CameraUpdateFactory.newLatLng(eventPosition));
-                            mapAPI.animateCamera(CameraUpdateFactory.zoomTo(19));
-
-                            final Database db = new Database();
-                            Database.Event event = new Database.Event(eventName,eventDesc,
-                                    ((NavigationActivity)getActivity()).getCurrentUsername(),
-                                    eventPosition.latitude, eventPosition.longitude, eventType);
-                            db.addEvent(event);
-                            buildEvent.dismiss();
-                        }
-                    }
-                });
-
-                //OnClick dialog cancel
-                eventCancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        buildEvent.dismiss();
-                    }
-                });
-
-                buildEvent.setCancelable(false);
-                buildEvent.show();
+                Intent intent = new Intent(getActivity(), CreateEvent.class);
+                intent.putExtra("LatID", lattitude);
+                intent.putExtra("LonID", longitude);
+                intent.putExtra("USER", user);
+                startActivity(intent);
             }
         });
 
@@ -168,8 +105,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         findEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Set Up find Event",
-                        Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -189,7 +125,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true); //this is the key ingredient to show the
+        builder.setAlwaysShow(true); //this is the key ingredient to show the map
 
         //Marker example
 //        LatLng FSU = new LatLng(30.441365, -84.298080);
