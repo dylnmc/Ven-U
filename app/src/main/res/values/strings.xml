@@ -5,7 +5,7 @@
     <string name="title_map">Map</string>
     <string name="title_profile">Profile</string>
     <string name="title_timeline">Timeline</string>
-    <string name="edit"><u>edit</u></string>
+    <string name="edit">edit</string>
     <string name="name">Name</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -17,6 +17,7 @@
     <string name="account_exists"><u>Already have an account? Log in here.</u></string>
     <string name="account_exists_false"><u>Don\'t have an account? Register here.</u></string>
     <string name="addEvent">Create New Event</string>
+    <string name="addEventButton">Create New Event</string>
     <string name="findEvent">Find An Event</string>
     <string name="description">Description</string>
     <string name="eventName">Event Name</string>
@@ -28,6 +29,8 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="change">Change</string>
+    <string name="change_password">Change Password</string>
+    <string name="view_events">View Events</string>
 
     <string-array name="eventType">
         <item>private</item>
