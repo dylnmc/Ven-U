@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -132,6 +133,8 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         TextView end_view = popupView.findViewById(R.id.event_end);
         TextView location_view = popupView.findViewById(R.id.event_location);
         Button close_btn = popupView.findViewById(R.id.button_close_viewevent);
+        Button directions_btn = popupView.findViewById(R.id.button_directions);
+        Button show_btn = popupView.findViewById(R.id.button_show);
 
         title_view.setText(item.getTitle());
         desc_view.setText(item.getDescription());
@@ -140,8 +143,8 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         start_view.setText(item.getStart());
         end_view.setText(item.getEnd());
         Geocoder geo = new Geocoder(getContext());
-        double lat = item.getLatitude();
-        double lon = item.getLongitude();
+        final double lat = item.getLatitude();
+        final double lon = item.getLongitude();
         List<Address> addresses = null;
         try {
             addresses = geo.getFromLocation(lat, lon, 1);
@@ -169,6 +172,31 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                 if (popupWindow.isShowing()) {
                     popupWindow.dismiss();
                 }
+            }
+        });
+
+        directions_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow.isShowing()) {
+                    popupWindow.dismiss();
+                }
+                Bundle directions = new Bundle();
+                directions.putDouble("lat", lat);
+                directions.putDouble("long", lon);
+                directions.putString("directions", "directions");
+                Navigation.findNavController(view).navigate(R.id.navigation_map, directions);
+            }
+        });
+
+        show_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle directions = new Bundle();
+                directions.putDouble("lat", lat);
+                directions.putDouble("long", lon);
+                directions.putString("show", "show");
+                Navigation.findNavController(view).navigate(R.id.navigation_map, directions);
             }
         });
 
