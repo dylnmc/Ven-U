@@ -81,18 +81,18 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                             location.setLongitude(event.getLongitude());
 
                             //Check if within radius(currently 5 miles)
-                            if(current_location.distanceTo(location) <= RADIUS){
-                                timelineItems.add(new TimelineItem(
-                                        event.getTitle(),
-                                        event.getVisibility(),
-                                        event.getCreator(),
-                                        event.getDescription(),
-                                        event.getStartTime(),
-                                        event.getEndTime(),
-                                        event.getLatitude(),
-                                        event.getLongitude()
-                                ));
-                            }
+                            // if(current_location.distanceTo(location) <= RADIUS) {
+                            // }
+                            timelineItems.add(new TimelineItem(
+                                    event.getTitle(),
+                                    event.getVisibility(),
+                                    event.getCreator(),
+                                    event.getDescription(),
+                                    event.getStartTime(),
+                                    event.getEndTime(),
+                                    event.getLatitude(),
+                                    event.getLongitude()
+                            ));
                         }
                         mRecyclerView = root.findViewById(R.id.recyclerView);
                         mRecyclerView.setHasFixedSize(true);
