@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -210,11 +211,15 @@ public class ProfileFragment extends Fragment {
                                     ListView eventsListView = root.findViewById(R.id.list_view_events);
 
                                     //For each event associated with the creator
+                                    ArrayList<String> creators = new ArrayList<>();
                                     for(DataSnapshot child : dataSnapshot.getChildren()){
                                         Database.Event event = child.getValue(Database.Event.class);
+                                        creators.add(event.getTitle());
 
                                     }
-
+                                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+                                            android.R.layout.simple_list_item_1, creators);
+                                    eventsListView.setAdapter(adapter);
                                     eventsListView.setVisibility(View.VISIBLE);
                                     viewEventsButton.setVisibility(View.INVISIBLE);
                                 }
