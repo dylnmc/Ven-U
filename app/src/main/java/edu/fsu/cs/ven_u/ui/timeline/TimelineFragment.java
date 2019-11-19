@@ -88,8 +88,16 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
 
                             //Check if within radius(currently 5 miles)
                             if(current_location.distanceTo(location) <= RADIUS){
-                                timelineItems.add(new TimelineItem(event.getTitle(),
-                                        event.getVisibility(), event.getCreator(), event.getDescription()));
+                                timelineItems.add(new TimelineItem(
+                                        event.getTitle(),
+                                        event.getVisibility(),
+                                        event.getCreator(),
+                                        event.getDescription(),
+                                        event.getStartTime(),
+                                        event.getEndTime(),
+                                        event.getLatitude(),
+                                        event.getLongitude()
+                                ));
                             }
                         }
                         mRecyclerView = root.findViewById(R.id.recyclerView);
@@ -99,7 +107,7 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                         //If no events found, insert message
                         if(timelineItems.size() == 0) {
                             timelineItems.add(new TimelineItem(
-                                    "No events found", "", "", ""));
+                                    "No events found", "", "", "", "", "", 0.0, 0.0));
                         }
                         mAdapter = new TimelineRecyclerAdapter(timelineItems, TimelineFragment.this);
                         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -117,7 +125,8 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
     public void onItemClick(int position) {
         // https://stackoverflow.com/questions/18461990/pop-up-window-to-display-some-stuff-in-a-fragment
         View popupView = getLayoutInflater().inflate(R.layout.fragment_event, null);
-        final PopupWindow popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final PopupWindow popupWindow = new PopupWindow(popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         EventFragment eventFragment = new EventFragment();
         TimelineItem item = timelineItems.get(position);
@@ -141,7 +150,7 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         int location[] = new int[2];
         View anchorView = getView();
         anchorView.getLocationOnScreen(location);
-        popupWindow.showAtLocation(anchorView, Gravity.CENTER_HORIZONTAL, location[0], 0 /* location[1] + anchorView.getHeight() */);
+        popupWindow.showAtLocation(anchorView, Gravity.FILL, 0, 0);
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
