@@ -6,11 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <fragment android:id="@+id/mapAutocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        />
+
     <fragment
         android:id="@+id/mapAPI"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/mapAutocomplete"
+        />
 
     <ImageView
         android:id="@+id/imageView1"

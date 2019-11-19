@@ -1,32 +1,23 @@
 package edu.fsu.cs.ven_u.ui.timeline;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,10 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.fsu.cs.ven_u.Database;
-import edu.fsu.cs.ven_u.EventFragment;
 import edu.fsu.cs.ven_u.R;
-import edu.fsu.cs.ven_u.TimelineRecyclerAdapter;
 import edu.fsu.cs.ven_u.TimelineItem;
+import edu.fsu.cs.ven_u.TimelineRecyclerAdapter;
 
 public class TimelineFragment extends Fragment implements TimelineRecyclerAdapter.OnTimelineItemListener {
     private String TAG = "TIMELINE_FRAGMENT";
@@ -63,12 +53,12 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
         final View root = inflater.inflate(R.layout.fragment_timeline, container, false);
 
         // final TextView textView = root.findViewById(R.id.text_timeline);
-        timelineViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                // textView.setText(s);
-            }
-        });
+        // timelineViewModel.getText().observe(this, new Observer<String>() {
+        //     @Override
+        //     public void onChanged(@Nullable String s) {
+        //         // textView.setText(s);
+        //     }
+        // });
 
         //5 miles in meters (8046.72)
         final double RADIUS = 8046.72;
@@ -91,18 +81,18 @@ public class TimelineFragment extends Fragment implements TimelineRecyclerAdapte
                             location.setLongitude(event.getLongitude());
 
                             //Check if within radius(currently 5 miles)
-                            if(current_location.distanceTo(location) <= RADIUS){
-                                timelineItems.add(new TimelineItem(
-                                        event.getTitle(),
-                                        event.getVisibility(),
-                                        event.getCreator(),
-                                        event.getDescription(),
-                                        event.getStartTime(),
-                                        event.getEndTime(),
-                                        event.getLatitude(),
-                                        event.getLongitude()
-                                ));
-                            }
+                            // if(current_location.distanceTo(location) <= RADIUS) {
+                            // }
+                            timelineItems.add(new TimelineItem(
+                                    event.getTitle(),
+                                    event.getVisibility(),
+                                    event.getCreator(),
+                                    event.getDescription(),
+                                    event.getStartTime(),
+                                    event.getEndTime(),
+                                    event.getLatitude(),
+                                    event.getLongitude()
+                            ));
                         }
                         mRecyclerView = root.findViewById(R.id.recyclerView);
                         mRecyclerView.setHasFixedSize(true);
